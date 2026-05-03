@@ -15118,7 +15118,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: { heal: 1, nosketch: 1 },
+		flags: { heal: 1, nosketch: 1, noassist: 1 },
 		onTryHit(source) {
 			if (!source.side.pokemon.filter(ally => ally.fainted).length) {
 				return false;
