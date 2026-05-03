@@ -19,6 +19,19 @@ The column value will be ignored for repeat sections.
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
+	{ section: "Campaign"},
+	{
+		name: "[Gen 9] Campaign AG",
+		mod: 'gen9',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause'],
+	},
+	{
+		name: "[Gen 9] Campaign Doubles",
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause'],
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
