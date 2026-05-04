@@ -23,13 +23,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Campaign (NatDex AG)",
 		mod: 'gen9',
-		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause'],
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 	{
 		name: "[Gen 9] Campaign Doubles (NatDex AG)",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause'],
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 
 	// S/V Singles
