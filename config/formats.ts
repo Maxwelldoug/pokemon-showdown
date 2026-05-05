@@ -40,7 +40,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Campaign Storage Box",
 		mod: 'gen9',
-		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 30']
+		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 30'],
 	},
 
 	// S/V Singles
