@@ -37,6 +37,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'triples',
 		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
+	{
+		name: "[Gen 9] Campaign Storage Box",
+		mod: 'gen9',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 30']
+	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
