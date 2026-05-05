@@ -21,21 +21,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{ section: "Campaign"},
 	{
-			name: "[Gen 9] Campaign Singles NatDex AG",
-			mod: 'gen9',
-			ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
+		name: "[Gen 9] Campaign Singles NatDex AG",
+		mod: 'gen9',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 	{
-			name: "[Gen 9] Campaign Doubles NatDex AG",
-			mod: 'gen9',
-			gameType: 'doubles',
-			ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
+		name: "[Gen 9] Campaign Doubles NatDex AG",
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 	{
-			name: "[Gen 9] Campaign Triples NatDex AG",
-			mod: 'gen9',
-			gameType: 'triples',
-			ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
+		name: "[Gen 9] Campaign Triples NatDex AG",
+		mod: 'gen9',
+		gameType: 'triples',
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 
 	// S/V Singles
