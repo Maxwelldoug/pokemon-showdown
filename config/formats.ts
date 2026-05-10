@@ -48,8 +48,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'champions',
 		team: 'randomFactory',
 		bestOfDefault: true,
-		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', 'Max Team Size = 3', '!Team Preview'],
-		banlist: ['Mythical', 'Restricted Legendary', '+Item:Mega Stone', '+Mega Stone'],
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', 'Min Team Size = 3', 'Max Team Size = 3', '!Team Preview'],
+		banlist: ['Mythical', 'Restricted Legendary'],
 
 		onBegin() {
 			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
