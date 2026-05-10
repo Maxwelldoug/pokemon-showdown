@@ -38,9 +38,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!Team Preview'],
 	},
 	{
-		name: "[Gen 9] Campaign Storage Box",
+		name: "[Gen 9] Campaign Storage Box NatDex AG",
 		mod: 'gen9',
 		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 24'],
+	},
+	{
+		name: "[Gen 9 Champions] Campaign Battle Factory NatDex AG",
+		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
+		mod: 'champions',
+		team: 'randomFactory',
+		bestOfDefault: true,
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', 'Max Team Size = 3', '!Team Preview'],
+		banlist: ['Legendary', 'Mythical', 'Restricted Legendary', '+Item:Mega Stone', '+Mega Stone'],
+
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
+		},
 	},
 
 	// S/V Singles
