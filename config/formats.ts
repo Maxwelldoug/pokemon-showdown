@@ -43,7 +43,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 24'],
 	},
 	{
-		name: "[Gen 9 Champions] Campaign Battle Factory NatDex AG",
+		name: "[Gen 9 Champions] Campaign Battle Factory",
 		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
 		mod: 'champions',
 		team: 'randomFactory',
