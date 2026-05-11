@@ -48,7 +48,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'champions',
 		team: 'randomFactory',
 		bestOfDefault: true,
-		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', 'Min Team Size = 3', 'Max Team Size = 3', '!Team Preview'],
+		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', '!! Min Team Size = 3', 'Max Team Size = 3', '!Team Preview'],
 		banlist: ['Mythical', 'Restricted Legendary'],
 
 		onBegin() {
