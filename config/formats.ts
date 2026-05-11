@@ -42,19 +42,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 24'],
 	},
-	{
-		name: "[Gen 9] Campaign Battle Factory",
-		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
-		mod: 'gen9',
-		team: 'randomFactory',
-		bestOfDefault: true,
-		ruleset: ['Standard AG', 'NatDex Mod', 'Terastal Clause', 'Min Team Size = 3', 'Max Team Size = 3', '!Team Preview'],
-		banlist: ['Mythical', 'Restricted Legendary'],
-
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>Battle Factory Tier: ${this.teamGenerator.factoryTier}</b></div>`);
-		},
-	},
 
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
