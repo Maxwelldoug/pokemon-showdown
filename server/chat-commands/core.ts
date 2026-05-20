@@ -1621,6 +1621,32 @@ export const commands: Chat.ChatCommands = {
 	},
 	useteamhelp: [`/useteam [packed team] - Sets your team for your next battles to the given [team].`],
 
+	battlehalllevel(target, room, user) {
+		if (!target) {
+			if (user.battleSettings.battleHallLevel !== null && user.battleSettings.battleHallLevel !== undefined) {
+				this.sendReply(this.tr`Your Battle Hall level is set to ${user.battleSettings.battleHallLevel}.`);
+			} else {
+				this.sendReply(this.tr`Your Battle Hall level is not set.`);
+			}
+			return;
+		}
+		const targetId = toID(target);
+		if (['off', 'clear', 'reset', 'default'].includes(targetId)) {
+			user.battleSettings.battleHallLevel = null;
+			this.sendReply(this.tr`Your Battle Hall level setting was cleared.`);
+			return;
+		}
+		const level = parseInt(target);
+		if (!Number.isFinite(level) || level < 1 || level > 100) {
+			throw new Chat.ErrorMessage(this.tr`Battle Hall level must be an integer between 1 and 100.`);
+		}
+		user.battleSettings.battleHallLevel = level;
+		this.sendReply(this.tr`Your Battle Hall level is now set to ${level}.`);
+	},
+	battlehalllevelhelp: [
+		`/battlehalllevel [level|off] - Sets the level for Battle Hall random teams, or clears it with "off".`,
+	],
+
 	vtm(target, room, user, connection) {
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return;

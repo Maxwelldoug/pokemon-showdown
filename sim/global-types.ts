@@ -411,6 +411,7 @@ interface PlayerOptions {
 	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
+	battleHallLevel?: number | null;
 }
 
 interface BasicTextData {

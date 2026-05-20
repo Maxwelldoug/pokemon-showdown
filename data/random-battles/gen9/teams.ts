@@ -2172,6 +2172,173 @@ export class RandomTeams {
 		return pokemon;
 	}
 
+	randomBattleHallTeam(options: PlayerOptions | null = null): RandomTeamsTypes.RandomSet[] {
+		const dex = Dex.forGen(4);
+		const team = [];
+		const natures = dex.natures.all();
+		const items = dex.items.all();
+		const restrictedLegendaryFilter = Tags.restrictedlegendary.speciesFilter;
+		const forcedLevel = options?.battleHallLevel ?? this.adjustLevel;
+
+		const speciesPool = dex.species.all().filter(species => {
+			if (species.num <= 0) return false;
+			if (species.gen > dex.gen) return false;
+			if (species.isNonstandard) return false;
+			const baseSpecies = dex.species.get(species.baseSpecies);
+			if (restrictedLegendaryFilter && (
+				restrictedLegendaryFilter(species) || restrictedLegendaryFilter(baseSpecies)
+			)) return false;
+			return true;
+		});
+
+		if (!speciesPool.length) {
+			throw new Error(`No legal Battle Hall Pokemon found.`);
+		}
+
+		for (let i = 0; i < this.maxTeamSize; i++) {
+			let species = this.sample(speciesPool);
+			let forme = species.name;
+
+			if (species.isNonstandard) species = dex.species.get(species.baseSpecies);
+
+			// Random legal item
+			let item = '';
+			let isIllegalItem;
+			let isBadItem;
+			if (dex.gen >= 2) {
+				do {
+					item = this.sample(items).name;
+					const itemData = dex.items.get(item);
+					isIllegalItem = itemData.gen > dex.gen || itemData.isNonstandard;
+					isBadItem = item.startsWith("TR") || itemData.isPokeball;
+				} while (isIllegalItem || (isBadItem && this.randomChance(19, 20)));
+			}
+
+			// Make sure forme is legal
+			if (species.battleOnly) {
+				if (typeof species.battleOnly === 'string') {
+					species = dex.species.get(species.battleOnly);
+				} else {
+					species = dex.species.get(this.sample(species.battleOnly));
+				}
+				forme = species.name;
+			}
+			if (species.requiredItems?.every(req => toID(req) !== toID(item))) {
+				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
+				species = dex.species.get(species.changesFrom);
+				forme = species.name;
+			}
+
+			// Make sure that a base forme does not hold any forme-modifier items.
+			let itemData = dex.items.get(item);
+			if (itemData.forcedForme && forme === dex.species.get(itemData.forcedForme).baseSpecies) {
+				do {
+					itemData = this.sample(items);
+					item = itemData.name;
+				} while (
+					itemData.gen > dex.gen ||
+					itemData.isNonstandard ||
+					(itemData.forcedForme && forme === dex.species.get(itemData.forcedForme).baseSpecies)
+				);
+			}
+
+			// Random legal ability
+			const abilities = Object.values(species.abilities).filter(a => dex.abilities.get(a).gen <= dex.gen);
+			const ability: string = dex.gen <= 2 ? 'No Ability' : this.sample(abilities);
+
+			// Four random unique moves from the movepool
+			let pool = ['struggle'];
+			if (forme === 'Smeargle') {
+				pool = dex.moves.all()
+					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
+					.map(m => m.id);
+			} else {
+				pool = [...dex.species.getMovePool(species.id)];
+			}
+
+			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
+
+			// Random EVs
+			const evs: StatsTable = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+			const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
+			let evpool = 510;
+			do {
+				const x = this.sample(s);
+				const y = this.random(Math.min(256 - evs[x], evpool + 1));
+				evs[x] += y;
+				evpool -= y;
+			} while (evpool > 0);
+
+			// Random IVs
+			const ivs = {
+				hp: this.random(32),
+				atk: this.random(32),
+				def: this.random(32),
+				spa: this.random(32),
+				spd: this.random(32),
+				spe: this.random(32),
+			};
+
+			// Random nature
+			const nature = this.sample(natures).name;
+
+			// Level balance--calculate directly from stats rather than using some silly lookup table
+			const mbstmin = 1307; // Sunkern has the lowest modified base stat total, and that total is 807
+			const stats = species.baseStats;
+
+			let mbst = (stats.hp * 2 + 31 + 21 + 100) + 10;
+			mbst += (stats.atk * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats.def * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats.spa * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats.spd * 2 + 31 + 21 + 100) + 5;
+			mbst += (stats.spe * 2 + 31 + 21 + 100) + 5;
+
+			let level;
+			if (forcedLevel !== null && forcedLevel !== undefined) {
+				level = forcedLevel;
+			} else {
+				level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
+
+				while (level < 100) {
+					mbst = Math.floor((stats.hp * 2 + 31 + 21 + 100) * level / 100 + 10);
+					// Since damage is roughly proportional to level
+					mbst += Math.floor(((stats.atk * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+					mbst += Math.floor((stats.def * 2 + 31 + 21 + 100) * level / 100 + 5);
+					mbst += Math.floor(((stats.spa * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
+					mbst += Math.floor((stats.spd * 2 + 31 + 21 + 100) * level / 100 + 5);
+					mbst += Math.floor((stats.spe * 2 + 31 + 21 + 100) * level / 100 + 5);
+
+					if (mbst >= mbstmin) break;
+					level++;
+				}
+			}
+
+			// Random happiness
+			const happiness = this.random(256);
+
+			// Random shininess
+			const shiny = this.randomChance(1, 1024);
+
+			const set: RandomTeamsTypes.RandomSet = {
+				name: species.baseSpecies,
+				species: species.name,
+				gender: species.gender || (this.random(2) ? 'F' : 'M'),
+				item,
+				ability,
+				moves,
+				evs,
+				ivs,
+				nature,
+				level,
+				happiness,
+				shiny,
+			};
+			team.push(set);
+		}
+
+		return team;
+	}
+
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 

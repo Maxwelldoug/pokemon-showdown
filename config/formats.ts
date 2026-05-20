@@ -43,6 +43,37 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard AG', 'NatDex Mod', 'Max Team Size = 24'],
 	},
 
+	{ section: "Campaign Factory"},
+	{
+		name: "[Gen 9] Battle Hall",
+		mod: 'gen9',
+		team: 'randomBattleHall',
+		ruleset: [
+			'[Gen 9] Campaign Singles NatDex AG',
+			'Max Team Size = 1',
+			'Z-Move Clause',
+			'Dynamax Clause',
+		],
+		validateTeam(team, options) {
+			if (!team) return;
+			const format = this.format as { team?: string };
+			const originalTeam = format.team;
+			format.team = '';
+			try {
+				const problems = this.baseValidateTeam(team, options);
+				if (problems) return problems;
+			} finally {
+				format.team = originalTeam;
+			}
+		},
+		onValidateSet(set) {
+			const item = this.dex.items.get(set.item);
+			if (item.megaStone || item.isPrimalOrb) {
+				return [`${set.name || set.species}'s item ${item.name} is banned in Battle Hall.`];
+			}
+		},
+	},
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 

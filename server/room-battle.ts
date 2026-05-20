@@ -467,6 +467,7 @@ export interface RoomBattlePlayerOptions {
 	rating?: number;
 	inviteOnly?: boolean;
 	hidden?: boolean;
+	battleHallLevel?: number | null;
 }
 
 export interface RoomBattleOptions {
@@ -657,7 +658,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string }) {
+	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string, battleHallLevel?: number | null }) {
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -1066,6 +1067,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				avatar: user ? `${user.avatar}` : '',
 				team: playerOpts.team || undefined,
 				rating: Math.round(playerOpts.rating || 0),
+				battleHallLevel: playerOpts.battleHallLevel ?? undefined,
 			};
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 			player.hasTeam = true;
@@ -1143,7 +1145,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
+	override setPlayerUser(
+		player: RoomBattlePlayer,
+		user: User | null,
+		playerOpts?: { team?: string, battleHallLevel?: number | null }
+	) {
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
@@ -1158,6 +1164,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				name: player.name,
 				avatar: user.avatar,
 				team: playerOpts?.team,
+				battleHallLevel: playerOpts?.battleHallLevel ?? undefined,
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 			if (playerOpts) player.hasTeam = true;

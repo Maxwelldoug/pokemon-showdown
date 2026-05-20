@@ -459,6 +459,7 @@ class Ladder extends LadderStore {
 				rating: ready.rating,
 				hidden: ready.settings.hidden,
 				inviteOnly: ready.settings.inviteOnly,
+				battleHallLevel: ready.settings.battleHallLevel,
 			});
 			if (ready.rating < minRating) minRating = ready.rating;
 		}

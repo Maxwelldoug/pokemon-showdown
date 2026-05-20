@@ -384,6 +384,7 @@ export class User extends Chat.MessageContext {
 		hidden: boolean,
 		inviteOnly: boolean,
 		special?: string,
+		battleHallLevel?: number | null,
 	};
 
 	isSysop: boolean;
@@ -479,6 +480,7 @@ export class User extends Chat.MessageContext {
 			team: '',
 			hidden: false,
 			inviteOnly: false,
+			battleHallLevel: null,
 		};
 
 		this.isSysop = false;
