@@ -3186,7 +3186,23 @@ export class Battle {
 	getTeam(options: PlayerOptions): PokemonSet[] {
 		let team = options.team;
 		if (typeof team === 'string') team = Teams.unpack(team);
-		if (team) return team;
+		if (team) {
+			if (this.format.id === 'gen9battlehall') {
+				const generatorOptions: PlayerOptions = { ...options, team: null };
+				if (!generatorOptions.seed) {
+					generatorOptions.seed = PRNG.generateSeed();
+				}
+				const replacementGenerator = Teams.getGenerator(this.format, generatorOptions.seed);
+				for (let i = 0; i < team.length; i++) {
+					const set = team[i];
+					const species = this.dex.species.get(set.species || set.name);
+					if (toID(species.baseSpecies) !== 'genesect') continue;
+					const replacement = replacementGenerator.getTeam(generatorOptions)[0];
+					if (replacement) team[i] = replacement;
+				}
+			}
+			return team;
+		}
 
 		if (!options.seed) {
 			options.seed = PRNG.generateSeed();
