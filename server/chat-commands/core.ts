@@ -1647,6 +1647,32 @@ export const commands: Chat.ChatCommands = {
 		`/battlehalllevel [level|off] - Sets the level for Battle Hall random teams, or clears it with "off".`,
 	],
 
+	battlehalltype(target, room, user) {
+		if (!target) {
+			if (user.battleSettings.battleHallType) {
+				this.sendReply(this.tr`Your Battle Hall type is set to ${user.battleSettings.battleHallType}.`);
+			} else {
+				this.sendReply(this.tr`Your Battle Hall type is not set.`);
+			}
+			return;
+		}
+		const targetId = toID(target);
+		if (['off', 'clear', 'reset', 'default', 'random'].includes(targetId)) {
+			user.battleSettings.battleHallType = null;
+			this.sendReply(this.tr`Your Battle Hall type setting was cleared.`);
+			return;
+		}
+		const type = Dex.forGen(4).types.get(target);
+		if (!type.exists) {
+			throw new Chat.ErrorMessage(this.tr`Battle Hall type must be a valid Gen 4 type.`);
+		}
+		user.battleSettings.battleHallType = type.name;
+		this.sendReply(this.tr`Your Battle Hall type is now set to ${type.name}.`);
+	},
+	battlehalltypehelp: [
+		`/battlehalltype [type|off] - Sets the type for Battle Hall random teams, or clears it with "off".`,
+	],
+
 	vtm(target, room, user, connection) {
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return;

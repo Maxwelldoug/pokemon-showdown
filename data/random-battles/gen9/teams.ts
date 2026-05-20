@@ -2177,17 +2177,22 @@ export class RandomTeams {
 		const team = [];
 		const natures = dex.natures.all();
 		const items = dex.items.all();
-		const restrictedLegendaryFilter = Tags.restrictedlegendary.speciesFilter;
 		const forcedLevel = options?.battleHallLevel ?? this.adjustLevel;
+		const forcedType = options?.battleHallType ? dex.types.get(options.battleHallType).name : undefined;
+		const isLegendary = (species: Species) => {
+			const baseTags = Dex.species.get(species.id).tags;
+			return baseTags.includes('Restricted Legendary') ||
+				baseTags.includes('Sub-Legendary') ||
+				baseTags.includes('Mythical');
+		};
 
 		const speciesPool = dex.species.all().filter(species => {
 			if (species.num <= 0) return false;
 			if (species.gen > dex.gen) return false;
 			if (species.isNonstandard) return false;
 			const baseSpecies = dex.species.get(species.baseSpecies);
-			if (restrictedLegendaryFilter && (
-				restrictedLegendaryFilter(species) || restrictedLegendaryFilter(baseSpecies)
-			)) return false;
+			if (isLegendary(species) || isLegendary(baseSpecies)) return false;
+			if (forcedType && !species.types.includes(forcedType)) return false;
 			return true;
 		});
 

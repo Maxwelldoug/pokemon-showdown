@@ -55,6 +55,7 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 		hidden: boolean,
 		inviteOnly: boolean,
 		battleHallLevel?: number | null,
+		battleHallType?: string | null,
 	} | null;
 	isDisqualified: boolean;
 	isEliminated: boolean;
@@ -970,10 +971,12 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		from.pendingChallenge = {
 			to, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
 			battleHallLevel: ready.settings.battleHallLevel,
+			battleHallType: ready.settings.battleHallType,
 		};
 		to.pendingChallenge = {
 			from, team: ready.settings.team, hidden: ready.settings.hidden, inviteOnly: ready.settings.inviteOnly,
 			battleHallLevel: ready.settings.battleHallLevel,
+			battleHallType: ready.settings.battleHallType,
 		};
 		from.sendRoom(`|tournament|update|${JSON.stringify({ challenging: to.name })}`);
 		to.sendRoom(`|tournament|update|${JSON.stringify({ challenged: from.name })}`);
@@ -1042,12 +1045,14 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				hidden: challenge.hidden,
 				inviteOnly: challenge.inviteOnly,
 				battleHallLevel: challenge.battleHallLevel,
+				battleHallType: challenge.battleHallType,
 			}, {
 				user,
 				team: ready.settings.team,
 				hidden: ready.settings.hidden,
 				inviteOnly: ready.settings.inviteOnly,
 				battleHallLevel: ready.settings.battleHallLevel,
+				battleHallType: ready.settings.battleHallType,
 			}],
 			rated: !Ladders.disabled && this.isRated,
 			challengeType: ready.challengeType,

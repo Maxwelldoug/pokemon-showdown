@@ -412,6 +412,7 @@ interface PlayerOptions {
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
 	battleHallLevel?: number | null;
+	battleHallType?: string | null;
 }
 
 interface BasicTextData {

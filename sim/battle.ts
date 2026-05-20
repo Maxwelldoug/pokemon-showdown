@@ -114,6 +114,7 @@ export class Battle {
 	readonly strictChoices: boolean;
 	readonly format: Format;
 	readonly formatData: EffectState;
+	readonly options: BattleOptions;
 	readonly gameType: GameType;
 	/**
 	 * The number of active pokemon per half-field.
@@ -189,6 +190,7 @@ export class Battle {
 	clampIntRange: (num: any, min?: number, max?: number) => number;
 	toID = toID;
 	constructor(options: BattleOptions) {
+		this.options = options;
 		this.log = [];
 		this.add('t:', Math.floor(Date.now() / 1000));
 
@@ -3184,6 +3186,15 @@ export class Battle {
 	// players
 
 	getTeam(options: PlayerOptions): PokemonSet[] {
+		if (this.format.id === 'gen9battlehall') {
+			options = { ...options };
+			if (!options.battleHallLevel) {
+				options.battleHallLevel = this.options.p1?.battleHallLevel || this.options.p2?.battleHallLevel;
+			}
+			if (!options.battleHallType) {
+				options.battleHallType = this.options.p1?.battleHallType || this.options.p2?.battleHallType;
+			}
+		}
 		let team = options.team;
 		if (typeof team === 'string') team = Teams.unpack(team);
 		if (team) {
