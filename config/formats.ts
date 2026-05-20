@@ -47,7 +47,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Battle Hall",
 		mod: 'gen9',
-		team: 'randomBattleHall',
 		ruleset: [
 			'[Gen 9] Campaign Singles NatDex AG',
 			'Max Team Size = 1',
@@ -56,15 +55,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		validateTeam(team, options) {
 			if (!team) return;
-			const format = this.format as { team?: string };
-			const originalTeam = format.team;
-			format.team = '';
-			try {
-				const problems = this.baseValidateTeam(team, options);
-				if (problems) return problems;
-			} finally {
-				format.team = originalTeam;
-			}
+			const problems = this.baseValidateTeam(team, options);
+			if (problems) return problems;
 		},
 		onValidateSet(set) {
 			const item = this.dex.items.get(set.item);

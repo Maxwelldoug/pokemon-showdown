@@ -631,6 +631,15 @@ export const Teams = new class Teams {
 		let mod = format.mod;
 		if (format.mod === 'monkeyspaw') mod = 'gen9';
 		const formatID = toID(format);
+		if (formatID === 'gen9battlehall') {
+			TeamGenerator = require(`../data/random-battles/gen9/teams`).default;
+			const generator = new TeamGenerator(format, seed);
+			// Use the Battle Hall generator without marking the format as random for the client.
+			generator.getTeam = function (options: PlayerOptions | null = null) {
+				return this.randomBattleHallTeam(options);
+			};
+			return generator;
+		}
 		if (mod === 'gen9ssb') {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
 		} else if (mod === 'afd') {
