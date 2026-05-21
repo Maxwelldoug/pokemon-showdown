@@ -1662,9 +1662,9 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`Your Battle Hall type setting was cleared.`);
 			return;
 		}
-		const type = Dex.forGen(4).types.get(target);
+		const type = Dex.types.get(target);
 		if (!type.exists) {
-			throw new Chat.ErrorMessage(this.tr`Battle Hall type must be a valid Gen 4 type.`);
+			throw new Chat.ErrorMessage(this.tr`Battle Hall type must be a valid type.`);
 		}
 		user.battleSettings.battleHallType = type.name;
 		this.sendReply(this.tr`Your Battle Hall type is now set to ${type.name}.`);

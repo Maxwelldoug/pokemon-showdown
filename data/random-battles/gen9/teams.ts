@@ -2173,7 +2173,7 @@ export class RandomTeams {
 	}
 
 	randomBattleHallTeam(options: PlayerOptions | null = null): RandomTeamsTypes.RandomSet[] {
-		const dex = Dex.forGen(4);
+		const dex = this.dex;
 		const team = [];
 		const natures = dex.natures.all();
 		const items = dex.items.all();
@@ -2188,7 +2188,7 @@ export class RandomTeams {
 
 		const speciesPool = dex.species.all().filter(species => {
 			if (species.num <= 0) return false;
-			if (species.gen > dex.gen) return false;
+			if (species.gen > 4) return false;
 			if (species.isNonstandard) return false;
 			const baseSpecies = dex.species.get(species.baseSpecies);
 			if (isLegendary(species) || isLegendary(baseSpecies)) return false;
