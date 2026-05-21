@@ -2188,7 +2188,7 @@ export class RandomTeams {
 
 		const speciesPool = dex.species.all().filter(species => {
 			if (species.num <= 0) return false;
-			if (species.gen > 4) return false;
+			if (species.gen >= 4) return false;
 			if (species.isNonstandard) return false;
 			const baseSpecies = dex.species.get(species.baseSpecies);
 			if (isLegendary(species) || isLegendary(baseSpecies)) return false;
